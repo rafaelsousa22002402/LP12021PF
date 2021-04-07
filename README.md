@@ -11,7 +11,7 @@
 Na resolução deste projecto deve ser utilizada a Linguagem de Programação C. Para além da correta implementação dos requisitos, tenha em conta os seguintes aspetos:
 - O código apresentado deve estar *bem indentado*. 
 - O código deve compilar sem erros ou *warnings* utilizando o *gcc* com as seguintes flags:
- `-Wall -Wextra -Wpedantic -std=c99 -Wvla`
+ `-Wall -Wextra -Wpedantic -ansi`
 - Tenha em atenção os nomes dados das variáveis, para que sejam indicadores daquilo que as mesmas vão conter.
 - Evite o uso de constantes mágicas. 
 - Evite duplicação de código. 
