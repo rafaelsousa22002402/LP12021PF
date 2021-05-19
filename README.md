@@ -17,7 +17,7 @@ Na resolução deste projecto deve ser utilizada a Linguagem de Programação C.
 - Evite duplicação de código. 
 - Considere a implementação de funções para melhorar a legibilidade, evitar a duplicação e criar soluções mais genéricas.
 - É proíbida a utilização de variáveis globais - i.e. variáveis declaradas fora de qualquer função.
-- Este trabalho poderá ser realizado individualmente ou em grupos com o máximo de 2 alunos. Os grupos têm **obrigatoriamente** de ser os mesmos grupos do MiniProjecto.
+- Este trabalho deverá ser realizado individualmente.
 
 Para a realização deste projecto, os alunos deverão adquirir as seguintes competências:
 - Manipulação de ficheiros
@@ -39,29 +39,32 @@ Pretende agora desenvolver-se um simulador capaz de calcular a propagação da e
 
 Após o carregamento/construção do mapa, se o utilizador escolher a opção "trigger", a bomba seleccionada deverá explodir. Essa explosão será propagada para as bombas adjacentes e fará com que estas também explodam:
 
-* As bombas que estiverem à distancia de 1 casa em X ou Y irão rebentar 10ms depois.
-
-* As bombas que estiverem nas casas diagonais irão rebentar 15ms depois
+* A bomba que estiver em cima deverá explodir 10ms depois.
+* A bomba que estiver na diagonal esquerda e em cima, deverá explodir 11ms depois.
+* A bomba que estiver à esquerda deverá explodir 12ms depois.
+* A bomba que estiver na diagonal esquerda e em baixo, deverá explodir 13ms depois.
+* A bomba que estiver em baixo deverá explodir 14ms depois.
+* A bomba que estiver na diagonal direita e em baixo, deverá explodir 15ms depois.
+* A bomba que estiver à direita deverá explodir 16ms depois.
+* A bomba que estiver na diagonal direita e em baixo, deverá explodir 17ms depois.
 
   ![propagacao](propagacao.jpg)
 
-Essas bombas irão por sua vez gerar novas explosões.
+Essas explosões irão por sua vez gerar novas explosões.
 
 Depedentendo da opção escolhida pelo utilizador, o programa deverá apresentar, a cada explosão, o mapa completo, ou em alternativa deverá apresentar o tempo e a coordenada da bomba que explodiu. Para este efeito o comando trigger implementado no MiniProjecto dará lugar a dois comandos:
 
-trigger <x> <y> - com esta opção se houver uma bomba na coordenada especificada irá explodir e desencadear explosões sucessivas nas bombas adjacentes até que não haja mais bombas adjacentes. O programa para cada explosão deverá mostrar o mapa no ecrã. Ver exemplos de funcionamento.
+propagate <x> <y> - com esta opção se houver uma bomba na coordenada especificada, esta irá explodir e desencadear explosões sucessivas nas bombas adjacentes até que não haja mais bombas adjacentes. O programa para cada explosão deverá mostrar o mapa no ecrã.
 
-log <x> <y> - com esta opção se houver uma bomba na coordenada especificada irá explodir e desencadear explosões sucessivas nas bombas adjacentes até que não haja mais bombas adjacentes. O programa para cada explosão deverá mostrar no ecrã o tempo e a coordenada da bomba que explodiu. Ver exemplos de funcionamento.
-
-
+log <x> <y> - com esta opção se houver uma bomba na coordenada especificada, esta irá explodir e desencadear explosões sucessivas nas bombas adjacentes até que não haja mais bombas adjacentes. O programa para cada explosão deverá mostrar no ecrã o tempo e a coordenada da bomba que explodiu.
 
 # 2 Implementação
 
 O programa deverá ser capaz de ler um ficheiro de configuração contendo o mapa com a localização de uma série de minas, e deverá fornecer ao utilizador uma interface para fazer alterações ao mapa - adicionar novas minas ou explodir uma mina existente. As explosões irão desencadear explosões das minas que estiverem em qualquer das 8 posições adjacentes. 
 
-Cada posição no mapa representa-se por duas coordenadas (X, Y). Estas coordenadas são valores inteiros e, nesta segunda fase *não há limite superior para o tamanho do tabuleiro*. O mapa deverá ser criado na zona de memória dinâmica.
+Cada posição no mapa representa-se por duas coordenadas (X, Y). Estas coordenadas são valores inteiros e, nesta segunda fase *não há limite superior para o tamanho do tabuleiro*. O mapa deverá ser criado na zona de memória dinâmica. No mínimo, o mapa terá de conter 1 linha e 1 coluna.
 
-Cada uma das coordenadas do mapa poderá estar vazia (sem mina) ou ter uma mina. Cada mina poderá assumir apenas 2 estados, ou armed ou off (armada ou rebentada). 
+Cada uma das coordenadas do mapa poderá estar vazia (sem bomba) ou ter uma bomba. Cada bomba poderá assumir apenas 2 estados, ou armed ou off. 
 
 ![mapa](map.png)
 
@@ -73,8 +76,8 @@ O programa deverá começar por apresentar o seguinte menu:
 +-----------------------------------------------------
 read <filename>     - read input file
 show                - show the mine map
-trigger <x> <y>     - trigger mine at <x> <y>
-log <x> <y>			- trigger mine at <x> <y>
+propagate <x> <y>   - trigger mine at <x> <y>
+log <x> <y>			      - trigger mine at <x> <y>
 plant <x> <y>       - place armed mine at <x> <y>
 export <filename>   - save file with current map
 quit                - exit program
@@ -82,7 +85,7 @@ sos                 - show menu
 +-----------------------------------------------------
 ```
 
-Sempre que o programa estiver à espera que o utilizador introduza um input, deverá imprimir, numa linha isolada, o caracter `>` - ver exemplo. Se o utilizador introduzir um input inválido o programa deverá mostrar a mensagem `Invalid command!` e deverá continuar à espera que o utilizar introduza um input.
+Sempre que o programa estiver à espera que o utilizador introduza um input, deverá imprimir, numa linha isolada, o caracter `>`. Se o utilizador introduzir um input inválido o programa deverá mostrar a mensagem `Invalid command!` e deverá continuar à espera que o utilizar introduza um input.
 
 ### 2.1.1 - Opção `read`
 
@@ -109,7 +112,7 @@ __.___.__________________
 ___.__*__________________
 ```
 
-### 2.1.3 Opção `trigger`
+### 2.1.3 Opção `propagate`
 
 Quando o utilizador introduz o texto `trigger`, seguido das coordenadas X e Y, o programa deverá alterar o estado da mina nas coordenadas X e Y de armed para off.
 
@@ -131,13 +134,13 @@ Se, nas coordenadas passadas pelo utilizador, existir uma mina no estado `armed`
 
 ### 2.1.5 Opção `export`
 
-Quando o utilizador introduz o texto `export` seguido do nome do ficheiro `filename`, o programa deverá criar um ficheiro novo, com o nome `filename`, contendo a informação do mapa. O ficheiro deverá conter  a informação da localização de todas as minas, independente do seu estado. Ou seja, o ficheiro não fará distinção entre os estados das minas, assumindo que estão todas em estado armed. 
+Quando o utilizador introduz o texto `export` seguido do nome do ficheiro `filename`, o programa deverá criar um ficheiro novo, com o nome `filename`, contendo a informação do mapa. O ficheiro deverá conter a informação da localização de todas as minas e o seu estado.
 
-O formato do ficheiro de output deverá ser o mesmo do ficheiro de input. Ou seja, deverá conter uma série de pares de coordenadas X, Y. É indiferente a ordem pela qual cada par de coordenadas é escrita no ficheiro e também é indiferente o separador utilizado entre pares de coordenadas, podendo ser utilizado um ` `(espaço), `\t`(tab) ou `\n` (newline).
-
+O formato do ficheiro de output deverá ser o mesmo do ficheiro de input. É indiferente a ordem pela qual cada par de coordenadas é escrita no ficheiro, desde que o ficheiro respeite o formato de ficheiro input espeficicado.
+ 
 ### 2.1.6 Opção `quit`
 
-O programa deverá simplesmente terminar.
+O programa deverá simplesmente terminar com o **código 0**.
 
 ### 2.1.7 Opção `sos`
 Apresenta de novo o menu com as opções.
