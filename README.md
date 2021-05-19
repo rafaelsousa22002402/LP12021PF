@@ -68,13 +68,25 @@ Cada uma das coordenadas do mapa poderá estar vazia (sem bomba) ou ter uma bomb
 
 ![mapa](map.png)
 
+## 2.1 - Leitura do ficheiro
+
+ A leitura do ficheiro deve ser a primeira acção feita pelo programa. O nome do ficheiro deverá ser passado pela linha de comandos. Ou seja, o programa deverá ser corrido com o comando:
+ ```
+ ./bombroad filename
+ ```
+O programa deverá ler o ficheiro com o nome `filename` e construir o mapa correspondente. 
+
+A primeira linha do ficheiro deverá conter as dimensões do mapa com formato `DIMX DIMY`. Note que o mapa não precisa de ser quadrado. Sendo assim, a alocação da memória para guardar o mapa deverá ser realizada de forma dinâmica. Existem duas formas de alocar uma matriz dinamicamente:
+ * Alocar um vector de DIMX x DIMY elementos e depois fazer o calculo do índice do vector a partir do índice desejado da matriz.
+ * Alocar um vector de apontadores que corresponde às linhas e depois para cada elemento desse vector, alocar um outro vector que corresponderá à coluna.
+ 
+ 
 ## 2.1 Menu
 
 O programa deverá começar por apresentar o seguinte menu:
 
 ```
 +-----------------------------------------------------
-read <filename>     - read input file
 show                - show the mine map
 propagate <x> <y>   - trigger mine at <x> <y>
 log <x> <y>			      - trigger mine at <x> <y>
@@ -87,9 +99,7 @@ sos                 - show menu
 
 Sempre que o programa estiver à espera que o utilizador introduza um input, deverá imprimir, numa linha isolada, o caracter `>`. Se o utilizador introduzir um input inválido o programa deverá mostrar a mensagem `Invalid command!` e deverá continuar à espera que o utilizar introduza um input.
 
-### 2.1.1 - Opção `read`
 
-Quando o utilizador introduz o texto `read` seguido do nome do ficheiro `filename`, o programa deverá ler o ficheiro com o nome `filename` e construir o mapa correspondente. Se houver um mapa já carregado na memória, deverá apagar por completo o mapa já existente. 
 
 ### 2.1.2 Opção `show`
 
@@ -186,35 +196,7 @@ Os alunos deverão criar os seus próprios ficheiros de input para testarem os s
 
 ## 3. Implemetação
 
-### 3.1 - Alocação dinâmica do mapa
 
-Ao iniciar o programa deverá assumir o tamanho mínimo de 25 linhas e 25 colunas. O tamanho do mapa poderá apenas ser alterado quando o utilizador escolhe a opção 'read'. A primeira linha do ficheiro deverá conter as dimensões do mapa com formato `DIMX DIMY`. Note que o mapa não precisa de ser quadrado.
-
-Para efectuar a alocação dinâmica de uma matriz em C poderá seguir o seguinte procedimento:
-```C
-// aloca um vector de vectores com tamanho nrows
-char **map = (char **) malloc(nrows * sizeof(char *));
-
-if (map == NULL)
-{
-    puts("Error: Out of Memory");
-    exit(1);
-}
-// para cada elemento do vector, aloca um vector com tamanho ncols
-for(i = 0; i < nrows; i++)
-{
-    map[i] = malloc(ncols * sizeof(char));
-    if (map[i] == NULL)
-    {
-        puts("Error: Out of Memory");
-        exit(1);
-    }
-}    
-// a partir daqui pode aceder aos elementos da matriz da forma habitual map[x][y]
-```
-
-Se necessitar de alterar a dimensão do mapa, poderá faze-lo utilizando a função `realloc()`. Contudo apenas poderá realocar memória que já tenha sido alocada, pelo que é necessário algum cuidado no desenho desta funcionalidade. A figura seguinte propõe uma implementação possível para esta rotina.
-  ![realloc](realloc_flow.png)
 
 
 ### 3.2 - Simulação
