@@ -6,7 +6,7 @@
 
 # 1. Introdução
 
-## 1.1 Recomendações
+## 1.1 Instruções
 
 Na resolução deste projecto deve ser utilizada a Linguagem de Programação C. Para além da correta implementação dos requisitos, tenha em conta os seguintes aspetos:
 - O código apresentado deve estar *bem indentado*. 
@@ -17,6 +17,7 @@ Na resolução deste projecto deve ser utilizada a Linguagem de Programação C.
 - Evite duplicação de código. 
 - Considere a implementação de funções para melhorar a legibilidade, evitar a duplicação e criar soluções mais genéricas.
 - É proíbida a utilização de variáveis globais - i.e. variáveis declaradas fora de qualquer função.
+- É proíbida a utilização da função `strtok()`.
 - Este trabalho deverá ser realizado individualmente.
 
 Para a realização deste projecto, os alunos deverão adquirir as seguintes competências:
@@ -28,8 +29,6 @@ Para a realização deste projecto, os alunos deverão adquirir as seguintes com
 - Argumentos do main
 - Estruturas
 - Memória Dinâmica
-- git
-- Trabalho em grupo
 
 ## 1.2 Descrição
 
@@ -80,6 +79,9 @@ A primeira linha do ficheiro deverá conter as dimensões do mapa com formato `D
  * Alocar um vector de DIMX x DIMY elementos e depois fazer o calculo do índice do vector a partir do índice desejado da matriz.
  * Alocar um vector de apontadores que corresponde às linhas e depois para cada elemento desse vector, alocar um outro vector que corresponderá à coluna.
  
+O nome do ficheiro é obrigatório para que o programa arranque correctamente. Caso esse argumento não seja passado, o programa deverá terminar mostrando a mensagem: `Error: missing file name`.
+ 
+ 
  
 ## 2.1 Menu
 
@@ -100,10 +102,9 @@ sos                 - show menu
 Sempre que o programa estiver à espera que o utilizador introduza um input, deverá imprimir, numa linha isolada, o caracter `>`. Se o utilizador introduzir um input inválido o programa deverá mostrar a mensagem `Invalid command!` e deverá continuar à espera que o utilizar introduza um input.
 
 
-
 ### 2.1.2 Opção `show`
 
-Quando o utilizador introduz o texto `show`, o programa deverá apresentar o mapa no terminal. Caso nenhum ficheiro tiver sido lido, o mapa deverá ser constituído por espaços vazios.
+Quando o utilizador introduz o texto `show`, o programa deverá apresentar o mapa no terminal. 
 
 No terminal o caracter `.`  representa uma mina em estado armed e o caracter `*` representa uma bomba off. As posições do mapa que estao vazias representam-se utilizando o caracter ` _` (underscore).
 
