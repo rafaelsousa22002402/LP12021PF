@@ -36,7 +36,7 @@ No mini projecto, construiu-se um programa que constroi um mapa de bombas em det
 
 Pretende agora desenvolver-se um simulador capaz de calcular a propagação da explosão das bombas considerando a distância entre elas.
 
-Após o carregamento/construção do mapa, se o utilizador escolher a opção "trigger", a bomba seleccionada deverá explodir. Essa explosão será propagada para as bombas adjacentes e fará com que estas também explodam:
+Após o carregamento/construção do mapa, se o utilizador escolher a opção "propagate", a bomba seleccionada deverá explodir. Essa explosão será propagada para as bombas adjacentes e fará com que estas também explodam:
 
 * A bomba que estiver em cima deverá explodir 10ms depois.
 * A bomba que estiver na diagonal esquerda e em cima, deverá explodir 11ms depois.
@@ -90,8 +90,8 @@ O programa deverá começar por apresentar o seguinte menu:
 ```
 +-----------------------------------------------------
 show                - show the mine map
-propagate <x> <y>   - trigger mine at <x> <y>
-log <x> <y>			      - trigger mine at <x> <y>
+propagate <x> <y>   - explode bomb at <x> <y>
+log <x> <y>			      - explode bomb at <x> <y>
 plant <x> <y>       - place armed mine at <x> <y>
 export <filename>   - save file with current map
 quit                - exit program
@@ -125,13 +125,13 @@ ___.__*__________________
 
 ### 2.1.3 Opção `propagate`
 
-Quando o utilizador introduz o texto `trigger`, seguido das coordenadas X e Y, o programa deverá alterar o estado da mina nas coordenadas X e Y de armed para off.
+Quando o utilizador introduz o texto `propagate`, seguido das coordenadas X e Y, o programa deverá alterar o estado da mina nas coordenadas X e Y de armed para off.
 
-Se, as coordenadas passadas pelo utilizador não forem válidas, o programa deverá imprimir no stdout a mensagem `Invalid coordinate`.
+Se, as coordenadas passadas pelo utilizador não forem válidas, o programa deverá imprimir a mensagem `Invalid coordinate`.
 
-Se, nas coordenadas passadas pelo utilizador, não existir uma mina, o programa deverá imprimir no stdou a mensagem `No mine at specified coordinate`.
+Se, nas coordenadas passadas pelo utilizador, não existir uma bomba, o programa deverá imprimir a mensagem `No bomb at specified coordinate`.
 
-Se, nas coordenadas passadas pelo utilizador, existir uma mina no estado off,  o programa deverá apenas continuar sem nenhuma mensagem de erro.
+Se, nas coordenadas passadas pelo utilizador, existir uma bomba no estado off,  o programa deverá apenas continuar sem nenhuma mensagem de erro.
 
 ### 2.1.4 Opção `plant`
 
@@ -158,47 +158,61 @@ Apresenta de novo o menu com as opções.
 
 ### 2.2 Ficheiro de input
 
-O programa deverá ler um ficheiro de input. Este ficheiro terá tipicamente a extensão `.ini`, contudo outras extensões poderão ser utilizadas.  
+O programa deverá ler um ficheiro de input. Este ficheiro terá tipicamente a extensão `.ini`, contudo outras extensões poderão ser utilizadas.
 
-O ficheiro de input será um ficheiro codificado em texto que deverá conter um conjunto de pares de coordenadas que representam as localizações das minas em estado armed. As minas em estado off ou os espaços vazios não são representados no ficheiro. Cada coordenada representa-se por um par de valores inteiros (X Y) separados por um espaço em branco, sendo X o número da linha e Y o número da coluna. Não há nenhuma restrição relativa a mudanças de linha dentro do ficheiro ou em relação à ordem de cada par de coordenadas dentro do ficheiro.
+Todas as linhas do ficheiro começadas pelo caracter `#` deverão ser ignoradas. *Linhas em branco também deverão ser ignoradas.*
+A primeira linha útil (que não começa `#`) do ficheiro deverá conter o tamanho do mapa representado por dois interos:
+```
+25 25
+```
+Neste projecto, o tamanho do mapa **não é** fixo.
 
+As linhas seguintes contém o estado, representado pelo caracter `.` ou `*`, seguido da localização da bomba. Cada linha pode apenas conter informação de uma bomba. Cada localização (coordenada) representa-se por um par de valores inteiros (X Y) separados por um espaço em branco (espaço ou tab), sendo X o número da linha e Y o número da coluna. Assim uma bomba em estado `armed` na coordenata 10 5 representa-se da seguinte forma:
+```
+. 10 5
+```
 Exemplo de ficheiro de input:
-
 ```
-15 15
-0 1
-0 2
-0 3
-5 9 6 4 6 5
-0 4
-0 5
-
-1 4 2 3 2 6 2 9
-3 4
-3 9 4 9
-5 2
-5 3
-
-5 4
-6 9 7 6
-7 2
-8 3
-8 6
+# Ficheiro exemplo
+25 25
+. 0 1
+. 0 2
+* 0 3
+* 5 9
+* 6 4
+* 6 5
+* 0 4
+# comentario a ser ignorado
+. 0 5
+. 1 4
+. 2 3
+. 2 6
+. 2 9
+. 3 4
+. 3 9
+. 4 9
+. 5 2
+. 5 3
+. 5 4
+. 6 9
+. 7 6 texto ignorado
+. 7 2
+. 8 3
+. 8 6
 ```
 
-A leitura do ficheiro deverá ser realizada até detectar o fim do ficheiro. A primeira linha do ficheiro contém o tamanho do mapa.
+A leitura do ficheiro deverá ser realizada até detectar o fim do ficheiro. 
 
-Caso não seja possível abrir o ficheiro, o programa deverá imprimir no stdout a mensagem `Error opening file`.
+Caso não seja possível abrir o ficheiro, o programa deverá imprimir a mensagem `Error opening file` e em seguida deverá terminar.
 
-Para cada coordenada X representada no ficheiro deverá existir uma coordenada Y. Caso isso não se verifique, significa que o ficheiro está mal formatado. Nesse caso o programa deverá mostrar no stream `stdout`a mensagem `File is corrupted`.
-A mesma mensagem deverá ser mostrada caso alguma coordenada presente no ficheiro não seja válida (fora dos limites).
+Para cada bomba, deverá existir o estado, uma coordenada X e uma Y. Caso isso não se verifique, significa que o ficheiro está mal formatado. Nesse caso o programa deverá mostrar a mensagem `File is corrupted` e deverá terminar. O caracter que separa o estado, a coordenada X e a coordenada Y poderá ser um espaço ou um tab, e todo o texto que apareça após a coodenada Y da bomba deverá ser simplesmente ignorado.
 
-Os alunos deverão criar os seus próprios ficheiros de input para testarem os seus programas. Ficheiros de input criados pelos alunos deverão ser entregues no moodle juntamente com o relatório.
+A mesma mensagem deverá ser mostrada caso alguma coordenada presente no ficheiro não seja válida (fora dos limites). Se isso acontecer, o programa deverá terminar.
+
+Os alunos deverão criar os seus próprios ficheiros de input para testarem os seus programas. Ficheiros de input criados pelos alunos deverão ser entregues no moodle e serão sujeitos a avaliação. Os alunos deverão criar ficheiros de input válidos e inválidos para poderem testar correctamente os seus programas.
+
 
 ## 3. Implemetação
-
-
-
 
 ### 3.2 - Simulação
 
@@ -206,8 +220,7 @@ Deverá ser criada uma lista de eventos. Cada explosão que ocorre irá gerar ev
 
 ![flowchart](flowchart.png)
 
-Cada evento está associado a um tempo, e a uma coordenada de uma bomba. A implementação mais simples será utilizar uma estrutura. A lista de eventos poderá ser implementada recorrendo a uma lista ligada ou a um vector. Contudo, a implementação é mais simples utilizando uma lista ligada em que a inserção na lista é feita de forma ordenada. Ou seja, quando um evento é criado, ele é colocado na lista de forma ordenada, e assim a primeira posição da lista é sempre o evento com menor `t`.
-
+Cada evento está associado a um tempo, e a uma coordenada de uma bomba. A implementação mais simples será utilizar uma estrutura. A lista de eventos deverá ser implementada recorrendo a uma lista ligada em que a inserção na lista é feita de forma ordenada. Ou seja, quando um evento é criado, ele é colocado na lista de forma ordenada, e assim a primeira posição da lista é sempre o evento com menor `t`.
 
 ## 4. Opção Extra
 Se o programa for corrido com a opção `-a` (como argumento do main) deverá ser utilizada a biblioteca ncurses.h para apresentação do mapa e do menu do programa. Esta opção não será avaliada pelo PANDORA.
@@ -216,17 +229,16 @@ Se o programa for corrido com a opção `-a` (como argumento do main) deverá se
 
 ### 5.1. Exemplo opção log
 ```bash
+./bombroad map0.ini
 +-----------------------------------------------------
-read <filename>         - read input file
 show                    - show the mine map
-trigger <x> <y>         - trigger mine at <x> <y>
-log <x> <y>             - trigger mine at <x> <y>
+propagate <x> <y>       - explode bomb at <x> <y>
+log <x> <y>             - explode bomb at <x> <y>
 plant <x> <y>           - place armed mine at <x> <y>
 export <filename>       - save file with current map
 quit                    - exit program
 sos                     - show menu
 +-----------------------------------------------------
->read map0_e.ini
 >show
 _.....____
 ____._____
@@ -261,17 +273,14 @@ __________
 >quit
 ```
 
-
-
 ## 6. Material a entregar
 
 * Ficheiro `.c` com código devidamente comentado e indentado:
     - Deve implementar as funcionalidades pedidas.
-    - O código deverá ser submetido na plataforma PANDORA [(2)](#ref2) até às **23:59 do dia 3 de Fevereiro de 2021** no *contest* **IC2020PF**.
+    - O código deverá ser submetido na plataforma PANDORA [(2)](#ref2) até às **23:59 do dia 14 de Junho de 2021** no *contest* **LP12021PF**.
     - A plataforma corre automaticamente uma série de testes e no fim atribui uma classificação **indicativa**. Os alunos deverão analisar o relatório emitido pela plataforma e poderão alterar o código e voltar a submeter o trabalho. Neste trabalho não haverá limite de submissões.
       A plataforma não permite a entrega de trabalhos após a data e hora limite.
     - Incorrecta indentação do código poderá originar penalizações na nota.
-* Ficheiro .txt a entregar no Moodle com o link para o repositório do GitHub onde têm o código. Será apreciada a verificação de commits por ambos os elementos do grupo.
 
 ## 7. Peso na avaliação
 
