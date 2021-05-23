@@ -217,7 +217,7 @@ Os alunos deverão criar os seus próprios ficheiros de input para testarem os s
 ## 3. Implemetação
  
 ### 3.1 Mensagens de Erro e códigos de saída
-**Atenção!** As mensagens de erro são diferentes das que foram utilizadas no mini projecto. Para facilitar a implementação, as mensagens de erro são fornecidas num header file - ![messages.h] que poderá ser incluído no código utiliando a directiva
+**Atenção!** As mensagens de erro são diferentes das que foram utilizadas no mini projecto. Para facilitar a implementação, as mensagens de erro são fornecidas num header file - ![messages.h](messages.h) que poderá ser incluído no código utiliando a directiva
  ```
  #include "messages.h"
  ```
@@ -226,14 +226,13 @@ Os alunos deverão criar os seus próprios ficheiros de input para testarem os s
   
 ### 3.2 - Simulação
 
-Deverá ser criada uma lista de eventos. Cada explosão que ocorre irá gerar eventos que deverão ser colocados na lista. Esta lista deverá ser percorrida até que já não existam eventos. A figura representa uma possível implementação da função que faz a simulação/gestão de eventos.
+Deverá ser criada uma lista de eventos. Cada explosão que ocorre irá gerar eventos que deverão ser colocados na lista. Esta lista deverá ser percorrida até que já não existam eventos. 
 
-![flowchart](flowchart.png)
-
-Cada evento está associado a um tempo, e a uma coordenada de uma bomba. A implementação mais simples será utilizar uma estrutura. A lista de eventos deverá ser implementada recorrendo a uma lista ligada em que a inserção na lista é feita de forma ordenada. Ou seja, quando um evento é criado, ele é colocado na lista de forma ordenada, e assim a primeira posição da lista é sempre o evento com menor `t`.
+Cada evento está associado a um tempo, e a uma coordenada de uma bomba. (A implementação mais simples será utilizar uma estrutura.) A lista de eventos deverá ser implementada recorrendo a uma lista ligada em que a inserção na lista é feita de forma ordenada. Ou seja, quando um evento é criado, ele é colocado na lista de forma ordenada, e assim a primeira posição da lista é sempre o evento com menor `t`.
 
 ## 4. Opção Extra
-Se o programa for corrido com a opção `-a` (como argumento do main) deverá ser utilizada a biblioteca ncurses.h para apresentação do mapa e do menu do programa. Esta opção não será avaliada pelo PANDORA.
+Se o programa for corrido com a opção `-a` (como argumento do main) deverá ser utilizada a biblioteca ncurses.h para apresentação do mapa e do menu do programa. Esta opção não 
+será avaliada pelo PANDORA.
 
 ## 5.  Exemplo de utilização
 
@@ -312,7 +311,7 @@ ___.__.___
 
 ## 7. Peso na avaliação
 
-O projecto vale 25% da nota final e será cotado de 0 a 20 valores.
+O projecto vale 20% da nota final e será cotado de 0 a 20 valores.
 
 Após a entrega do projecto será realizada uma defesa do projecto onde cada elemento do grupo terá de efectuar alterações ao código. Se o aluno não conseguir efectuar as alterações pedidas ao seu código será aplicada uma penalização sobre a nota do projecto que poderá variar entre 10% a 100%.
 
