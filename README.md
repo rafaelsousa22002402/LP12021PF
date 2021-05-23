@@ -45,7 +45,7 @@ Após o carregamento/construção do mapa, se o utilizador escolher a opção "p
 * A bomba que estiver em baixo deverá explodir 14ms depois.
 * A bomba que estiver na diagonal direita e em baixo, deverá explodir 15ms depois.
 * A bomba que estiver à direita deverá explodir 16ms depois.
-* A bomba que estiver na diagonal direita e em baixo, deverá explodir 17ms depois.
+* A bomba que estiver na diagonal direita e em cima, deverá explodir 17ms depois.
 
   ![propagacao](propagacao.jpg)
 
@@ -99,7 +99,8 @@ sos                 - show menu
 +-----------------------------------------------------
 ```
 
-Sempre que o programa estiver à espera que o utilizador introduza um input, deverá imprimir, numa linha isolada, o caracter `>`. Se o utilizador introduzir um input inválido o programa deverá mostrar a mensagem `Invalid command!` e deverá continuar à espera que o utilizar introduza um input.
+Sempre que o programa estiver à espera que o utilizador introduza um input, deverá imprimir, numa linha isolada, o caracter `>`. Se o utilizador introduzir um input inválido o programa deverá mostrar a mensagem `
+ command!` e deverá continuar à espera que o utilizar introduza um input.
 
 
 ### 2.1.2 Opção `show`
@@ -127,9 +128,9 @@ ___.__*__________________
 
 Quando o utilizador introduz o texto `propagate`, seguido das coordenadas X e Y, o programa deverá alterar o estado da mina nas coordenadas X e Y de armed para off.
 
-Se, as coordenadas passadas pelo utilizador não forem válidas, o programa deverá imprimir a mensagem `Invalid coordinate`.
+Se, as coordenadas passadas pelo utilizador não forem válidas, o programa deverá imprimir a mensagem `Error: invalid coordinate`.
 
-Se, nas coordenadas passadas pelo utilizador, não existir uma bomba, o programa deverá imprimir a mensagem `No bomb at specified coordinate`.
+Se, nas coordenadas passadas pelo utilizador, não existir uma bomba, o programa deverá imprimir a mensagem `Error: no bomb at specified coordinate`.
 
 Se, nas coordenadas passadas pelo utilizador, existir uma bomba no estado off,  o programa deverá apenas continuar sem nenhuma mensagem de erro.
 
@@ -137,7 +138,7 @@ Se, nas coordenadas passadas pelo utilizador, existir uma bomba no estado off,  
 
 Quando o utilizador introduz o texto `plant`, seguido das coordenadas X e Y, o programa deverá colocar, nas coordenadas X e Y, uma mina em estado armed.
 
-Se, as coordenadas passadas pelo utilizador não forem válidas, o programa deverá imprimir no stdout a mensagem `Invalid coordinate`.
+Se, as coordenadas passadas pelo utilizador não forem válidas, o programa deverá imprimir no stdout a mensagem `Error: invalid coordinate`.
 
 Se, nas coordenadas passadas pelo utilizador, existir uma mina em estado `off`, o programa deverá alterar o seu estado para `armed`.
 
@@ -174,15 +175,11 @@ As linhas seguintes contém o estado, representado pelo caracter `.` ou `*`, seg
 Exemplo de ficheiro de input:
 ```
 # Ficheiro exemplo
-25 25
+9 10
 . 0 1
 . 0 2
-* 0 3
-* 5 9
-* 6 4
-* 6 5
-* 0 4
-# comentario a ser ignorado
+. 0 3
+. 0 4
 . 0 5
 . 1 4
 . 2 3
@@ -194,18 +191,23 @@ Exemplo de ficheiro de input:
 . 5 2
 . 5 3
 . 5 4
+. 5 9
+. 6 4
+. 6 5
 . 6 9
-. 7 6 texto ignorado
 . 7 2
+. 7 6
 . 8 3
 . 8 6
 ```
 
 A leitura do ficheiro deverá ser realizada até detectar o fim do ficheiro. 
 
-Caso não seja possível abrir o ficheiro, o programa deverá imprimir a mensagem `Error opening file` e em seguida deverá terminar.
+Caso não seja possível abrir o ficheiro, o programa deverá imprimir a mensagem `Error: could not open file` e em seguida deverá terminar.
 
-Para cada bomba, deverá existir o estado, uma coordenada X e uma Y. Caso isso não se verifique, significa que o ficheiro está mal formatado. Nesse caso o programa deverá mostrar a mensagem `File is corrupted` e deverá terminar. O caracter que separa o estado, a coordenada X e a coordenada Y poderá ser um espaço ou um tab, e todo o texto que apareça após a coodenada Y da bomba deverá ser simplesmente ignorado.
+ Se o tamanho do mapa for invalido, o programa deverá mostrar a mensagem `Error: invalid map dimensions` e em seguida deverá terminar.
+ 
+Para cada bomba, deverá existir o estado, uma coordenada X e uma Y. Caso isso não se verifique, significa que o ficheiro está mal formatado. Nesse caso o programa deverá mostrar a mensagem `Error: File is corrupted` e deverá terminar. O caracter que separa o estado, a coordenada X e a coordenada Y poderá ser um espaço ou um tab, e todo o texto que apareça após a coodenada Y da bomba deverá ser simplesmente ignorado.
 
 A mesma mensagem deverá ser mostrada caso alguma coordenada presente no ficheiro não seja válida (fora dos limites). Se isso acontecer, o programa deverá terminar.
 
@@ -213,7 +215,15 @@ Os alunos deverão criar os seus próprios ficheiros de input para testarem os s
 
 
 ## 3. Implemetação
-
+ 
+### 3.1 Mensagens de Erro e códigos de saída
+**Atenção!** As mensagens de erro são diferentes das que foram utilizadas no mini projecto. Para facilitar a implementação, as mensagens de erro são fornecidas num header file - ![messages.h](messages.h) que poderá ser incluído no código utiliando a directiva
+ ```
+ #include "messages.h"
+ ```
+ 
+ O programa deve sempre terminar com o código de retorno 0. O código de retorno do programa é o valor que a função  `main()` retorna. Alternativamente, podem utilizar a função `exit(0)` da biblioteca `stdlib.h` que permite terminar o programa fora da função da função `main()`.
+  
 ### 3.2 - Simulação
 
 Deverá ser criada uma lista de eventos. Cada explosão que ocorre irá gerar eventos que deverão ser colocados na lista. Esta lista deverá ser percorrida até que já não existam eventos. A figura representa uma possível implementação da função que faz a simulação/gestão de eventos.
@@ -230,35 +240,54 @@ Se o programa for corrido com a opção `-a` (como argumento do main) deverá se
 ### 5.1. Exemplo opção log
 ```bash
 ./bombroad map0.ini
-+-----------------------------------------------------
-show                    - show the mine map
-propagate <x> <y>       - explode bomb at <x> <y>
-log <x> <y>             - explode bomb at <x> <y>
-plant <x> <y>           - place armed mine at <x> <y>
-export <filename>       - save file with current map
-quit                    - exit program
-sos                     - show menu
-+-----------------------------------------------------
++-----------------------------------------------------+
+show                - show the mine map
+propagate <x> <y>   - explode bomb at <x> <y>
+log <x> <y>         - explode bomb at <x> <y>
+plant <x> <y>       - place bomb at <x> <y>
+export <filename>   - save file with current map
+quit                - exit program
+sos                 - show menu
++-----------------------------------------------------+
+>log 2 9
+0 [2, 9]
+14 [3, 9]
+28 [4, 9]
+42 [5, 9]
+56 [6, 9]
 >show
 _.....____
 ____._____
-___.__.__.
-____.____.
-_________.
-__...____.
-____..___.
+___.__.__*
+____.____*
+_________*
+__...____*
+____..___*
 __.___.___
 ___.__.___
-__________
+>quit
+```
+
+```bash
+./bombroad map0.ini
++-----------------------------------------------------+
+show                - show the mine map
+propagate <x> <y>   - explode bomb at <x> <y>
+log <x> <y>         - explode bomb at <x> <y>
+plant <x> <y>       - place bomb at <x> <y>
+export <filename>   - save file with current map
+quit                - exit program
+sos                 - show menu
++-----------------------------------------------------+
 >log 0 1
 0 [0, 1]
-10 [0, 2]
-20 [0, 3]
-30 [0, 4]
-35 [1, 4]
-40 [0, 5]
-50 [2, 3]
-65 [3, 4]
+16 [0, 2]
+32 [0, 3]
+47 [1, 4]
+48 [0, 4]
+60 [2, 3]
+64 [0, 5]
+75 [3, 4]
 >show
 _*****____
 ____*_____
@@ -269,10 +298,9 @@ __...____.
 ____..___.
 __.___.___
 ___.__.___
-__________
->quit
+>
 ```
-
+ 
 ## 6. Material a entregar
 
 * Ficheiro `.c` com código devidamente comentado e indentado:
