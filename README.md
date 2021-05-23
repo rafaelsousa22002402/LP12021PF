@@ -47,7 +47,7 @@ Após o carregamento/construção do mapa, se o utilizador escolher a opção "p
 * A bomba que estiver à direita deverá explodir 16ms depois.
 * A bomba que estiver na diagonal direita e em cima, deverá explodir 17ms depois.
 
-  ![propagacao](propagacao.jpg)
+  ![explosion](explosion.jpg)
 
 Essas explosões irão por sua vez gerar novas explosões.
 
