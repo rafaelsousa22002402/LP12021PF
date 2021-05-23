@@ -217,7 +217,7 @@ Os alunos deverão criar os seus próprios ficheiros de input para testarem os s
 ## 3. Implemetação
  
 ### 3.1 Mensagens de Erro e códigos de saída
-**Atenção!** As mensagens de erro são diferentes das que foram utilizadas no mini projecto. Para facilitar a implementação, as mensagens de erro são fornecidas num header file - ![](messages.h) que poderá ser incluído no código utiliando a directiva
+**Atenção!** As mensagens de erro são diferentes das que foram utilizadas no mini projecto. Para facilitar a implementação, as mensagens de erro são fornecidas num header file - ![messages.h] que poderá ser incluído no código utiliando a directiva
  ```
  #include "messages.h"
  ```
