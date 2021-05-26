@@ -234,6 +234,9 @@ Cada evento está associado a um tempo, e a uma coordenada de uma bomba. (A impl
 Se o programa for corrido com a opção `-a` (como argumento do main) deverá ser utilizada a biblioteca ncurses.h para apresentação do mapa e do menu do programa. Esta opção não 
 será avaliada pelo PANDORA.
 
+Um exemplo de funcionamento utilizando a biblioteca ncurses pode ser visualizado no vídeo ![Uud0FDlE5v](Uud0FDlE5v.mp4).
+ 
+
 ## 5.  Exemplo de utilização
 
 ### 5.1. Exemplo opção log
